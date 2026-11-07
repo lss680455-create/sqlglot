@@ -2085,9 +2085,8 @@ def regexp_extract_sql(
 
 @unsupported_args("position", "occurrence", "modifiers")
 def regexp_replace_sql(self: Generator, expression: exp.RegexpReplace) -> str:
-    return self.func(
-        "REGEXP_REPLACE", expression.this, expression.expression, expression.args["replacement"]
-    )
+    replacement = expression.args.get("replacement") or exp.Literal.string("")
+    return self.func("REGEXP_REPLACE", expression.this, expression.expression, replacement)
 
 
 def pivot_column_names(aggregations: Iterable[exp.Expr], dialect: DialectType) -> list[str]:

@@ -244,6 +244,15 @@ class TestOracle(Validator):
         self.validate_identity("CREATE GLOBAL TEMPORARY TABLE t AS SELECT * FROM orders")
         self.validate_identity("CREATE PRIVATE TEMPORARY TABLE t AS SELECT * FROM orders")
         self.validate_identity("REGEXP_REPLACE('source', 'search')")
+        self.validate_all(
+            "REGEXP_REPLACE('source', 'search')",
+            write={
+                "bigquery": "REGEXP_REPLACE('source', 'search', '')",
+                "databricks": "REGEXP_REPLACE('source', 'search', '')",
+                "hive": "REGEXP_REPLACE('source', 'search', '')",
+                "spark": "REGEXP_REPLACE('source', 'search', '')",
+            },
+        )
         self.validate_identity("TIMESTAMP(3) WITH TIME ZONE")
         self.validate_identity("SYSTIMESTAMP").assert_is(exp.Systimestamp)
         self.validate_identity("SELECT SYSTIMESTAMP AT TIME ZONE 'UTC'")
